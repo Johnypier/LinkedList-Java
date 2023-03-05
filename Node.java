@@ -1,6 +1,6 @@
 public class Node {
 	private int info = 0;
-	public Node next;
+	private Node nextNode;
 
 	public Node(int info) {
 		this.info = info;
@@ -11,14 +11,14 @@ public class Node {
 	}
 
 	public void setInfo(int info) {
-	this.info = info;
+		this.info = info;
 	}
 
-	public void setNext(Node next) {
-		this.next = next;
+	public void setNext(Node nextNode) {
+		this.nextNode = nextNode;
 	}
 
 	public Node getNext() {
-		return next;
+		return nextNode;
 	}
 }

@@ -1,125 +1,133 @@
 public class LinkedList {
+	private Node rootNode;
+	private int size = 0;
 
-	private Node elements;
-	private int length = 0;
-
-	public LinkedList() {
-	}
-
+	/**
+	 * Retrieve the first element of the linked list.
+	 * 
+	 * @return Root of the linked list.
+	 */
 	public Node getFirstElement() {
-	    return elements;
+		return rootNode;
 	}
 
+	/**
+	 * Retrieve the last element of the linked list.
+	 * 
+	 * @return Last element of the linked list.
+	 */
 	public Node getLastElement() {
-	        Node current = elements;
-	        while (current.getNext() != null) {
-	        	current = current.getNext();
-	        }
-	        return current;
+		Node currentNode = rootNode;
+		while (currentNode.getNext() != null) {
+			currentNode = currentNode.getNext();
+		}
+		return currentNode;
 	}
 
+	/**
+	 * Add the element to the linked list.
+	 * 
+	 * @param info Element to add.
+	 */
 	public void add(int info) {
-		if (elements == null) {
-			elements = new Node(info);
+		if (rootNode == null) {
+			rootNode = new Node(info);
 		} else {
-		Node temp = new Node(info);
-		Node current = elements;
-	        while(current.getNext() != null){
-	        	current = current.getNext();	
-	        }
-	        current.setNext(temp);
-		}
-		length++;
-	}
-
-	public int size() {
-		return length;
-	}
-
-	public void remove(int pos) {
-        if (pos < 0 || pos > size()-1){
-        	System.out.println("Index is out of bound.");
-        }else {
-        	if (elements!=null) {
-        		if (pos == 0) {
-        			Node temp = elements;
-        			elements = elements.getNext(); 
-        			temp.setNext(null);
-        			length--;
-        		}else {
-        		Node previous = elements;
-        		int count = 0;
-        		while (count < pos - 1) {
-        			previous = previous.getNext();
-        			count++;
-        		}
-        		//Remove an element
-        		Node current = previous.getNext();
-        		previous.setNext(current.getNext());
-        		current.setNext(null);
-        		length--;
-        		}
-        	}
-        }
-	}
-	//Converts list to String
-	public String toString() {
-		String ret = "";
-		Node current = elements; //Point to header
-		//Just add each element to String
-		while (current != null) {
-			if(current.getNext() == null) {
-				ret +=current.getInfo();
-				break;
+			Node temp = new Node(info);
+			Node currentNode = rootNode;
+			while (currentNode.getNext() != null) {
+				currentNode = currentNode.getNext();
 			}
-			ret +=current.getInfo()+",";
-			current = current.getNext();
+			currentNode.setNext(temp);
 		}
-		return ret;
+		size++;
 	}
-	//Returns the sum of all elements in the list
+
+	/*
+	 * Size of the linked list.
+	 */
+	public int size() {
+		return size;
+	}
+
+	/**
+	 * Remove the element at specified index.
+	 * 
+	 * @param index Index of the element.
+	 */
+	public void remove(int index) {
+		if (index < 0 || index > size() - 1) {
+			throw new IllegalArgumentException("Index out of bound!");
+		} else {
+			if (rootNode != null) {
+				if (index == 0) {
+					Node temp = rootNode;
+					rootNode = rootNode.getNext();
+					temp.setNext(null);
+					size--;
+				} else {
+					Node previousNode = rootNode;
+					int counter = 0;
+					while (counter < index - 1) {
+						previousNode = previousNode.getNext();
+						counter++;
+					}
+					Node currentNode = previousNode.getNext();
+					previousNode.setNext(currentNode.getNext());
+					currentNode.setNext(null);
+					size--;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Calculate the sum of each node's value.
+	 * 
+	 * @return Sum of nodes' values.
+	 */
 	public int sum() {
-		Node current = elements;
+		Node current = rootNode;
 		int sum = 0;
 		while (current != null) {
-			sum +=current.getInfo();
+			sum += current.getInfo();
 			current = current.getNext();
 		}
 		return sum;
 	}
 
+	/**
+	 * Create a copy of the linked list.
+	 * 
+	 * @return New copy of the linked list.
+	 */
 	public LinkedList copy() {
 		LinkedList copy = new LinkedList();
-		if (elements != null) {
-		copy.add(elements.getInfo());
-		Node current = elements;
-			while (current.getNext()!=null) {
-				copy.add(current.getNext().getInfo());
-				current = current.getNext();
+		if (rootNode != null) {
+			copy.add(rootNode.getInfo());
+			Node currentNode = rootNode;
+			while (currentNode.getNext() != null) {
+				copy.add(currentNode.getNext().getInfo());
+				currentNode = currentNode.getNext();
 			}
 		}
 		return copy;
 	}
 
-	public int hits(int value) {
-		int amount=0;
-		Node current = elements;
-		while (current.getNext()!=null) {
-			if (current.getInfo()==value) {
-				amount++;
-			}
-			current = current.getNext();
-		}
-		return amount;
-	}
-
+	/**
+	 * Create an array of the elements from the linked list which have the specified
+	 * value.
+	 * 
+	 * @param value Value of needed elements.
+	 * @return All elements with the same value.
+	 */
 	public Node[] search(int value) {
 		int i = 0;
-		//Important: length of the array must be equal to amount of "hits"
+		// Important: length of the array must be equal to the amount of "hits"
 		Node[] listArray = new Node[hits(value)];
-		Node current = elements;
-		while (current!=null) {
-			if (current.getInfo()==value && i<hits(value)) {
+		Node currentNode = rootNode;
+		while (currentNode != null) {
+			if (current.getInfo() == value && i < hits(value)) {
 				listArray[i] = current;
 				i++;
 			}
@@ -128,43 +136,94 @@ public class LinkedList {
 		return listArray;
 	}
 
-	public int[] toArray() {
-		int i = 1;
-		int[] intArray = new int[size()];
-		Node current = elements;
-		while(current!=null && i<size()) {
-			intArray[i] = current.getNext().getInfo();
-			current = current.getNext();
-			i++;
+	/**
+	 * Determine the amount of value's occurrences in the linked list.
+	 * 
+	 * @param value Value we need to find.
+	 * @return Amount of value's occurrences.
+	 */
+	private int hits(int value) {
+		int amount = 0;
+		Node currentNode = rootNode;
+		while (currentNode.getNext() != null) {
+			if (currentNode.getInfo() == value) {
+				amount++;
+			}
+			currentNode = currentNode.getNext();
 		}
-		intArray[0] = elements.getInfo();
-		return intArray;
+		return amount;
 	}
 
+	/*
+	 * Convert the linked list into an array.
+	 */
+	public int[] toArray() {
+		if (rootNode != null) {
+			int i = 1;
+			int[] intArray = new int[size()];
+			intArray[0] = rootNode.getInfo();
+
+			Node currentNode = rootNode;
+			while (currentNode != null && i < size()) {
+				intArray[i] = currentNode.getNext().getInfo();
+				currentNode = currentNode.getNext();
+				i++;
+			}
+
+			return intArray;
+		}
+		return new int[0];
+	}
+
+	/**
+	 * Create a linked list from an array.
+	 * 
+	 * @param intArray Array to convert.
+	 * @return New linked list.
+	 */
 	public static LinkedList fromArray(int[] intArray) {
 		if (intArray == null) {
 			return null;
 		}
-		LinkedList copy = new LinkedList();
-		for (int i = 0; i<intArray.length;i++) {
-			copy.add(intArray[i]);
+		LinkedList temp = new LinkedList();
+		for (int i : intArray) {
+			temp.add(i);
 		}
-		return copy;
+		return temp;
 	}
 
+	/**
+	 * Reverse the linked list.
+	 * 
+	 * @return Reversed linked list.
+	 */
 	public LinkedList reverse() {
-		if (elements == null || elements.getNext()==null) {
+		if (rootNode == null || rootNode.getNext() == null) {
 			return null;
 		}
-		Node previous = null, next = null;
-		Node current = elements;
-		while (current!=null) {
-			next = current.getNext();
-			current.setNext(previous);
-			previous = current;
-			current = next;
+		Node currentNode = rootNode;
+		Node previousNode = null;
+		Node nextNode = null;
+		while (currentNode != null) {
+			nextNode = currentNode.getNext();
+			currentNode.setNext(previousNode);
+			previousNode = currentNode;
+			currentNode = nextNode;
 		}
-		elements = previous;
+		rootNode = previousNode;
 		return copy();
+	}
+
+	@Override
+	public String toString() {
+		Node currentNode = rootNode;
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("[");
+		while (currentNode.getNext() != null) {
+			stringBuilder.append(currentNode + ", ");
+			currentNode = currentNode.getNext();
+		}
+		stringBuilder.append(currentNode + "]");
+		return stringBuilder.toString();
 	}
 }
